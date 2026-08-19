@@ -557,18 +557,6 @@ export function ServicePage({ data, onConsult }) {
           )}
         </div>
       </section>
-      <nav className="subnav">
-        {services.map((s) => (
-          <Link
-            className={s.slug === data.slug ? "active" : ""}
-            to={`/${s.slug}`}
-            key={s.slug}
-          >
-            {s.nav}
-          </Link>
-        ))}
-        <Link to="/reviews">작업후기</Link>
-      </nav>
       <section className="situation section-pad">
         <motion.header {...reveal}>
           <span className="eyebrow">YOU ARE NOT ALONE</span>
