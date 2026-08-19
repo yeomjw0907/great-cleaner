@@ -718,7 +718,7 @@ export function ReviewsPage({ onConsult }) {
               key={r.title}
             >
               <div className="record-image">
-                <img src={r.image} alt="" />
+                <img src={r.image} alt={r.alt} loading="lazy" />
                 <span>샘플 기록</span>
               </div>
               <div className="record-copy">
