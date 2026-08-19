@@ -7,6 +7,7 @@ import {
   ChevronDown,
   EyeOff,
   MessageCircle,
+  MoveHorizontal,
   ShieldCheck,
 } from "lucide-react";
 import { Faq, ServiceLinks, reveal } from "./App";
@@ -21,6 +22,54 @@ function PageTitle({ title, description }) {
   }, [title, description]);
   return null;
 }
+
+function BeforeAfterSlider() {
+  const [position, setPosition] = useState(50);
+
+  return (
+    <div className="comparison-wrap">
+      <div
+        className="before-after"
+        style={{ "--position": `${position}%` }}
+      >
+        <img
+          className="comparison-image comparison-after"
+          src="/images/trash-home-after.webp"
+          alt="쓰레기집 청소를 마친 깨끗한 거실"
+          draggable="false"
+        />
+        <div className="comparison-before" aria-hidden="true">
+          <img
+            className="comparison-image"
+            src="/images/trash-home-before.webp"
+            alt=""
+            draggable="false"
+          />
+        </div>
+        <span className="comparison-label label-before">청소 전</span>
+        <span className="comparison-label label-after">청소 후</span>
+        <input
+          className="comparison-range"
+          type="range"
+          min="0"
+          max="100"
+          value={position}
+          onChange={(event) => setPosition(Number(event.target.value))}
+          aria-label="청소 전후 이미지 비교 위치"
+        />
+        <div className="comparison-handle" aria-hidden="true">
+          <MoveHorizontal />
+        </div>
+      </div>
+      <div className="comparison-copy">
+        <span>쓰레기집 청소 · 아파트</span>
+        <h3>쌓여 있던 생활폐기물부터 공간 세척까지</h3>
+        <p>가운데 손잡이를 좌우로 움직여 청소 전후를 비교해 보세요.</p>
+      </div>
+    </div>
+  );
+}
+
 export function HomePage({ onConsult }) {
   const { scrollY } = useScroll(),
     y = useTransform(scrollY, [0, 800], [0, 90]);
@@ -196,16 +245,7 @@ export function HomePage({ onConsult }) {
             작업후기 페이지 보기 <ArrowRight />
           </Link>
         </motion.div>
-        <div className="preview-records">
-          {sampleRecords.slice(0, 2).map((r) => (
-            <Link to="/reviews" key={r.title}>
-              <img src={r.image} alt="" />
-              <span>{r.type}</span>
-              <h3>{r.title}</h3>
-              <p>{r.text}</p>
-            </Link>
-          ))}
-        </div>
+        <BeforeAfterSlider />
       </section>
       <FinalCta onConsult={onConsult} />
     </main>

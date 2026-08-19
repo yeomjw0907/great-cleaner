@@ -458,32 +458,118 @@ section[id] {
 .line-link svg {
   width: 18px;
 }
-.preview-records {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
+.comparison-wrap {
+  min-width: 0;
 }
-.preview-records a {
-  border-top: 1px solid var(--ink);
-  padding-top: 18px;
+.before-after {
+  --position: 50%;
+  position: relative;
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  background: var(--navy);
+  user-select: none;
 }
-.preview-records img {
-  height: 310px;
+.comparison-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  margin-bottom: 18px;
+  pointer-events: none;
 }
-.preview-records span {
+.comparison-before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+  clip-path: inset(0 calc(100% - var(--position)) 0 0);
+}
+.comparison-label {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  padding: 8px 11px;
+  background: rgba(3, 17, 31, 0.86);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  backdrop-filter: blur(8px);
+}
+.label-before {
+  left: 18px;
+}
+.label-after {
+  right: 18px;
+}
+.comparison-range {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: ew-resize;
+}
+.comparison-handle {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  left: var(--position);
+  width: 62px;
+  height: 62px;
+  display: grid;
+  place-items: center;
+  transform: translate(-50%, -50%);
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 0 12px 28px rgba(2, 12, 24, 0.28);
+  pointer-events: none;
+}
+.comparison-handle::before,
+.comparison-handle::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  width: 2px;
+  height: 50vh;
+  transform: translateX(-50%);
+  background: #fff;
+}
+.comparison-handle::before {
+  bottom: 100%;
+}
+.comparison-handle::after {
+  top: 100%;
+}
+.comparison-handle svg {
+  width: 25px;
+}
+.comparison-range:focus-visible + .comparison-handle {
+  outline: 3px solid var(--sky);
+  outline-offset: 4px;
+}
+.comparison-copy {
+  padding-top: 22px;
+  border-bottom: 1px solid var(--ink);
+  padding-bottom: 22px;
+}
+.comparison-copy span {
   font-size: 11px;
   color: var(--blue);
 }
-.preview-records h3 {
-  font-size: 20px;
+.comparison-copy h3 {
+  font-size: 22px;
   margin: 8px 0;
 }
-.preview-records p {
+.comparison-copy p {
   font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
+  margin: 0;
 }
 .service-hero {
   background-image: var(--hero);
@@ -1393,11 +1479,19 @@ footer {
   .standard-row p {
     grid-column: 2/4;
   }
-  .preview-records {
-    grid-template-columns: 1fr;
+  .comparison-handle {
+    width: 52px;
+    height: 52px;
   }
-  .preview-records img {
-    height: 280px;
+  .comparison-label {
+    top: 12px;
+    padding: 7px 9px;
+  }
+  .label-before {
+    left: 12px;
+  }
+  .label-after {
+    right: 12px;
   }
   .subnav {
     top: 74px;
