@@ -4,3 +4,4 @@ dist/
 .env*
 output/
 .playwright-cli/
+.vercel-hostname-shim.cjs
