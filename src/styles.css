@@ -287,6 +287,7 @@ section[id] {
 }
 .home-intro h2,
 .home-services h2,
+.scope-planner h2,
 .standard-copy h2,
 .review-preview h2,
 .situation h2,
@@ -323,6 +324,43 @@ section[id] {
 .trust-line span {
   font-size: 13px;
   color: var(--muted);
+}
+.proof-strip {
+  min-height: 132px;
+  padding: 0 var(--pad);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+.proof-strip > div {
+  display: grid;
+  grid-template-columns: 34px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 28px clamp(20px, 2.5vw, 38px);
+  border-right: 1px solid var(--line);
+}
+.proof-strip > div:first-child {
+  border-left: 1px solid var(--line);
+}
+.proof-strip svg {
+  width: 25px;
+  color: var(--blue);
+}
+.proof-strip span,
+.proof-strip b,
+.proof-strip small {
+  display: block;
+}
+.proof-strip b {
+  font-size: 14px;
+  margin-bottom: 7px;
+}
+.proof-strip small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
 }
 .home-services {
   display: grid;
@@ -389,6 +427,185 @@ section[id] {
 }
 .home-service-grid .coming {
   opacity: 0.5;
+}
+.scope-planner {
+  background: var(--paper);
+}
+.scope-planner > header {
+  max-width: 950px;
+}
+.scope-planner > header > p {
+  max-width: 570px;
+  margin: 30px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.8;
+}
+.planner-shell {
+  max-width: 1220px;
+  margin: 72px auto 0;
+  display: grid;
+  grid-template-columns: 1.12fr 0.88fr;
+  box-shadow: 0 24px 70px rgba(6, 24, 45, 0.1);
+}
+.planner-form {
+  padding: clamp(34px, 4vw, 60px);
+  background: #fff;
+}
+.planner-form fieldset {
+  padding: 0;
+  margin: 0 0 38px;
+  border: 0;
+}
+.planner-form fieldset:last-child {
+  margin-bottom: 0;
+}
+.planner-form legend {
+  width: 100%;
+  margin-bottom: 14px;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.planner-options {
+  display: grid;
+  gap: 8px;
+}
+.service-options,
+.compact-options {
+  grid-template-columns: repeat(2, 1fr);
+}
+.condition-options {
+  grid-template-columns: repeat(3, 1fr);
+}
+.extra-options {
+  grid-template-columns: repeat(3, 1fr);
+}
+.planner-options button {
+  min-height: 52px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 600;
+  transition:
+    border-color 0.2s,
+    background 0.2s,
+    color 0.2s,
+    transform 0.2s;
+}
+.planner-options button:hover {
+  border-color: var(--blue);
+  color: var(--blue);
+}
+.planner-options button:active {
+  transform: scale(0.985);
+}
+.planner-options button.active {
+  border-color: var(--navy);
+  background: var(--navy);
+  color: #fff;
+}
+.extra-options button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.option-indicator {
+  width: 16px;
+  height: 16px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #9ba7b2;
+}
+.option-indicator svg {
+  width: 12px;
+}
+.extra-options button.active .option-indicator {
+  border-color: var(--sky);
+}
+.planner-options button:focus-visible {
+  outline: 3px solid var(--sky);
+  outline-offset: 2px;
+}
+.planner-result {
+  min-width: 0;
+  padding: clamp(34px, 4vw, 60px);
+  display: flex;
+  flex-direction: column;
+  background: var(--navy);
+  color: #fff;
+}
+.planner-result > div:first-child {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+}
+.planner-result > div:first-child span {
+  color: var(--sky);
+  font-size: 12px;
+  font-weight: 700;
+}
+.planner-result > div:first-child small {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 10px;
+}
+.planner-result > strong {
+  display: block;
+  margin-top: 34px;
+  color: var(--sky);
+  font-size: clamp(34px, 4vw, 54px);
+  line-height: 1.15;
+  letter-spacing: -0.05em;
+}
+.planner-result > p {
+  margin: 10px 0 28px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 14px;
+}
+.planner-result ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+}
+.planner-result li {
+  display: grid;
+  grid-template-columns: 38px 1fr;
+  gap: 12px;
+  padding: 15px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 13px;
+}
+.planner-result li span {
+  color: var(--sky);
+  font: 500 10px "DM Sans";
+  letter-spacing: 0.1em;
+}
+.planner-notice {
+  display: grid;
+  grid-template-columns: 24px 1fr;
+  gap: 12px;
+  margin: 28px 0;
+  color: rgba(255, 255, 255, 0.52);
+}
+.planner-notice svg {
+  width: 20px;
+  color: var(--sky);
+}
+.planner-notice p {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.planner-result .primary {
+  width: 100%;
+  margin-top: auto;
 }
 .home-standard {
   display: grid;
@@ -1340,6 +1557,19 @@ footer {
   .home-standard {
     grid-template-columns: 1fr;
   }
+  .proof-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .proof-strip > div:nth-child(3) {
+    border-left: 1px solid var(--line);
+  }
+  .proof-strip > div:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--line);
+  }
+  .planner-shell {
+    max-width: 760px;
+    grid-template-columns: 1fr;
+  }
   .standard-image {
     height: 620px;
   }
@@ -1435,6 +1665,7 @@ footer {
   }
   .home-intro h2,
   .home-services h2,
+  .scope-planner h2,
   .standard-copy h2,
   .review-preview h2,
   .situation h2,
@@ -1456,6 +1687,53 @@ footer {
   }
   .trust-line span {
     grid-column: 2;
+  }
+  .proof-strip {
+    min-height: 0;
+    padding: 0 22px;
+  }
+  .proof-strip > div {
+    min-height: 142px;
+    grid-template-columns: 1fr;
+    align-content: center;
+    gap: 10px;
+    padding: 22px 12px;
+  }
+  .proof-strip b {
+    font-size: 13px;
+  }
+  .proof-strip small {
+    font-size: 10px;
+  }
+  .planner-shell {
+    margin-top: 46px;
+    box-shadow: none;
+  }
+  .planner-form,
+  .planner-result {
+    padding: 32px 20px;
+  }
+  .planner-form fieldset {
+    margin-bottom: 32px;
+  }
+  .condition-options,
+  .extra-options {
+    grid-template-columns: 1fr;
+  }
+  .planner-options button {
+    min-height: 50px;
+    font-size: 12px;
+  }
+  .planner-result > div:first-child {
+    display: block;
+  }
+  .planner-result > div:first-child small {
+    display: block;
+    margin-top: 6px;
+  }
+  .planner-result > strong {
+    margin-top: 28px;
+    font-size: 36px;
   }
   .home-service-grid > div > a,
   .home-service-grid > div > div {

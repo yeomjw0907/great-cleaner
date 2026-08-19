@@ -3,11 +3,16 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
+  Camera,
   Check,
+  CheckCircle2,
   ChevronDown,
+  ClipboardCheck,
   EyeOff,
   MessageCircle,
   MoveHorizontal,
+  PackageCheck,
+  ScanSearch,
   ShieldCheck,
 } from "lucide-react";
 import { Faq, ServiceLinks, reveal } from "./App";
@@ -70,6 +75,172 @@ function BeforeAfterSlider() {
   );
 }
 
+const trustPoints = [
+  [Camera, "사진 기반 1차 확인", "노출 부담 없이 필요한 범위를 먼저 살핍니다."],
+  [PackageCheck, "보관 물품 우선", "남길 물건의 기준부터 확인합니다."],
+  [ClipboardCheck, "작업 범위 합의", "분류·반출·세척 범위를 시작 전에 나눕니다."],
+  [CheckCircle2, "마무리 함께 확인", "합의한 범위가 끝났는지 확인합니다."],
+];
+
+const plannerServices = [
+  {
+    id: "trash",
+    label: "쓰레기집 청소",
+    steps: ["보관 물품 분류", "생활폐기물 반출", "공간 기본 세척"],
+  },
+  {
+    id: "waste",
+    label: "폐기물 처리",
+    steps: ["품목·물량 확인", "반출 동선 계획", "폐기물 분류·운반"],
+  },
+  {
+    id: "heritage",
+    label: "유품정리",
+    steps: ["중요 물품 탐색", "보관·확인·정리 분류", "공간 마무리"],
+  },
+  {
+    id: "special",
+    label: "특수청소",
+    steps: ["오염 범위 확인", "오염원 제거", "전문 세척·표면 처리"],
+  },
+];
+
+function ScopePlanner({ onConsult }) {
+  const [service, setService] = useState("trash");
+  const [space, setSpace] = useState(1);
+  const [condition, setCondition] = useState(1);
+  const [extras, setExtras] = useState({ odor: false, deep: false, stairs: false });
+  const selected = plannerServices.find((item) => item.id === service);
+  const extraCount = Object.values(extras).filter(Boolean).length;
+  const score = space + condition + extraCount;
+  const level = score >= 6 ? "종합 회복 범위" : score >= 3 ? "집중 작업 범위" : "기본 작업 범위";
+  const steps = [
+    ...selected.steps,
+    ...(extras.odor ? ["악취 원인 확인·탈취"] : []),
+    ...(extras.deep ? ["집중 세척 범위 협의"] : []),
+    ...(extras.stairs ? ["계단·반출 동선 추가 확인"] : []),
+  ];
+  const toggleExtra = (key) =>
+    setExtras((current) => ({ ...current, [key]: !current[key] }));
+
+  return (
+    <section className="scope-planner section-pad" id="scope-planner">
+      <motion.header {...reveal}>
+        <span className="eyebrow">SCOPE CHECK · 01</span>
+        <h2>
+          1분이면 필요한 작업을
+          <br />
+          <em>먼저 가늠할 수 있습니다.</em>
+        </h2>
+        <p>
+          공간의 상태를 선택하면 상담 전에 확인할 작업 범위를 정리해 드립니다.
+        </p>
+      </motion.header>
+      <motion.div className="planner-shell" {...reveal}>
+        <div className="planner-form">
+          <fieldset>
+            <legend>01. 어떤 도움이 필요한가요?</legend>
+            <div className="planner-options service-options">
+              {plannerServices.map((item) => (
+                <button
+                  type="button"
+                  className={service === item.id ? "active" : ""}
+                  aria-pressed={service === item.id}
+                  onClick={() => setService(item.id)}
+                  key={item.id}
+                >
+                  {item.label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>02. 공간 크기는 어느 정도인가요?</legend>
+            <div className="planner-options compact-options">
+              {["10평 미만", "10~20평", "20~30평", "30평 이상"].map((label, index) => (
+                <button
+                  type="button"
+                  className={space === index ? "active" : ""}
+                  aria-pressed={space === index}
+                  onClick={() => setSpace(index)}
+                  key={label}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>03. 현재 상태에 가장 가까운 단계는?</legend>
+            <div className="planner-options compact-options condition-options">
+              {["정리 위주", "분류·반출 필요", "오염까지 심함"].map((label, index) => (
+                <button
+                  type="button"
+                  className={condition === index ? "active" : ""}
+                  aria-pressed={condition === index}
+                  onClick={() => setCondition(index)}
+                  key={label}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>04. 추가로 해당하는 항목이 있나요?</legend>
+            <div className="planner-options extra-options">
+              {[
+                ["odor", "악취가 남아 있음"],
+                ["deep", "주방·욕실 집중 세척"],
+                ["stairs", "엘리베이터 없음"],
+              ].map(([key, label]) => (
+                <button
+                  type="button"
+                  className={extras[key] ? "active" : ""}
+                  aria-pressed={extras[key]}
+                  onClick={() => toggleExtra(key)}
+                  key={key}
+                >
+                  <span className="option-indicator">
+                    {extras[key] && <Check />}
+                  </span>
+                  {label}
+                </button>
+              ))}
+            </div>
+          </fieldset>
+        </div>
+        <aside className="planner-result" aria-live="polite">
+          <div>
+            <span>예상 작업 구성</span>
+            <small>선택한 상태를 기준으로 정리했습니다.</small>
+          </div>
+          <strong>{level}</strong>
+          <p>{selected.label}</p>
+          <ol>
+            {steps.map((step, index) => (
+              <li key={step}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                {step}
+              </li>
+            ))}
+          </ol>
+          <div className="planner-notice">
+            <ScanSearch />
+            <p>
+              정확한 금액은 물량과 반출 환경을 사진 또는 방문으로 확인한 뒤
+              안내합니다.
+            </p>
+          </div>
+          <button className="primary" type="button" onClick={onConsult}>
+            사진으로 정확히 상담하기 <ArrowRight />
+          </button>
+        </aside>
+      </motion.div>
+    </section>
+  );
+}
+
 export function HomePage({ onConsult }) {
   const { scrollY } = useScroll(),
     y = useTransform(scrollY, [0, 800], [0, 90]);
@@ -113,6 +284,17 @@ export function HomePage({ onConsult }) {
           <i />
           <b>HOME</b>
         </div>
+      </section>
+      <section className="proof-strip" aria-label="상담과 작업 진행 원칙">
+        {trustPoints.map(([Icon, title, description]) => (
+          <div key={title}>
+            <Icon />
+            <span>
+              <b>{title}</b>
+              <small>{description}</small>
+            </span>
+          </div>
+        ))}
       </section>
       <section className="home-intro section-pad">
         <motion.div {...reveal}>
@@ -181,6 +363,7 @@ export function HomePage({ onConsult }) {
           })}
         </div>
       </section>
+      <ScopePlanner onConsult={onConsult} />
       <section className="home-standard">
         <div className="standard-image">
           <img
