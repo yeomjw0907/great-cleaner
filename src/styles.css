@@ -1226,27 +1226,15 @@ section[id] {
   border: 1px solid var(--line);
   background: #fff;
 }
-.record-image {
-  height: 330px;
-  position: relative;
-  overflow: hidden;
+.record-comparison {
+  aspect-ratio: 16 / 10;
 }
-.record-image img {
-  height: 100%;
-  object-fit: cover;
-  transition: 0.5s;
+.record-comparison .comparison-handle {
+  width: 54px;
+  height: 54px;
 }
-.record-grid article:hover img {
-  transform: scale(1.025);
-}
-.record-image span {
-  position: absolute;
-  left: 15px;
-  top: 15px;
-  background: var(--navy);
-  color: #fff;
-  padding: 7px 10px;
-  font-size: 10px;
+.record-comparison .comparison-handle svg {
+  width: 22px;
 }
 .record-copy {
   padding: 28px;
@@ -1950,8 +1938,8 @@ footer {
   .record-grid {
     grid-template-columns: 1fr;
   }
-  .record-image {
-    height: 260px;
+  .record-comparison {
+    aspect-ratio: 4 / 3;
   }
   .review-policy > div:last-child > div {
     grid-template-columns: 30px 1fr;

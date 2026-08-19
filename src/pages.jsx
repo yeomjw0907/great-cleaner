@@ -75,6 +75,48 @@ function BeforeAfterSlider() {
   );
 }
 
+function RecordBeforeAfter({ record }) {
+  const [position, setPosition] = useState(50);
+
+  return (
+    <div
+      className="record-comparison before-after"
+      style={{ "--position": `${position}%` }}
+    >
+      <img
+        className="comparison-image comparison-after"
+        src={record.afterImage}
+        alt={record.afterAlt}
+        loading="lazy"
+        draggable="false"
+      />
+      <div className="comparison-before" aria-hidden="true">
+        <img
+          className="comparison-image"
+          src={record.beforeImage}
+          alt=""
+          loading="lazy"
+          draggable="false"
+        />
+      </div>
+      <span className="comparison-label label-before">청소 전</span>
+      <span className="comparison-label label-after">청소 후</span>
+      <input
+        className="comparison-range"
+        type="range"
+        min="0"
+        max="100"
+        value={position}
+        onChange={(event) => setPosition(Number(event.target.value))}
+        aria-label={`${record.title} 청소 전후 비교 위치`}
+      />
+      <div className="comparison-handle" aria-hidden="true">
+        <MoveHorizontal />
+      </div>
+    </div>
+  );
+}
+
 const trustPoints = [
   [Camera, "사진 기반 1차 확인", "노출 부담 없이 필요한 범위를 먼저 살핍니다."],
   [PackageCheck, "보관 물품 우선", "남길 물건의 기준부터 확인합니다."],
@@ -717,10 +759,7 @@ export function ReviewsPage({ onConsult }) {
               animate={{ opacity: 1 }}
               key={r.title}
             >
-              <div className="record-image">
-                <img src={r.image} alt={r.alt} loading="lazy" />
-                <span>샘플 기록</span>
-              </div>
+              <RecordBeforeAfter record={r} />
               <div className="record-copy">
                 <small>{r.meta}</small>
                 <h3>{r.title}</h3>
