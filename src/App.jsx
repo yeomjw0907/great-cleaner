@@ -45,10 +45,7 @@ function Header({ onConsult }) {
     setOpen(false);
   }, [pathname]);
   const links = [
-    ["/trash", "쓰레기집"],
-    ["/waste", "폐기물 처리"],
-    ["/heritage", "유품정리"],
-    ["/special", "특수청소"],
+    ...services.map((service) => [`/${service.slug}`, service.nav]),
     ["/reviews", "작업후기"],
   ];
   return (

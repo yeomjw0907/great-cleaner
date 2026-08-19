@@ -138,6 +138,12 @@ const plannerServices = [
     steps: ["품목·물량 확인", "반출 동선 계획", "폐기물 분류·운반"],
   },
   {
+    id: "move-in",
+    label: "이사·입주청소",
+    estimates: [[18, 25], [20, 32], [30, 48], [42, 68]],
+    steps: ["공간·오염 상태 점검", "창틀·수납장 분진 제거", "주방·욕실·바닥 세척"],
+  },
+  {
     id: "heritage",
     label: "유품정리",
     estimates: [[40, 90], [80, 140], [120, 200], [180, 280]],
@@ -332,7 +338,7 @@ export function HomePage({ onConsult }) {
     <main>
       <PageTitle
         title="위대한 청소부 | 공간을 되살리는 기술"
-        description="쓰레기집 청소, 특수청소, 유품정리, 폐기물 처리까지 공간 회복을 위한 전문 서비스."
+        description="쓰레기집 청소, 이사·입주청소, 특수청소, 유품정리, 폐기물 처리까지 공간 회복을 위한 전문 서비스."
       />
       <section className="hero home-hero">
         <motion.div className="hero-image" style={{ y }} />
@@ -687,7 +693,7 @@ export function ServicePage({ data, onConsult }) {
 }
 export function ReviewsPage({ onConsult }) {
   const [filter, setFilter] = useState("전체");
-  const types = ["전체", "쓰레기집", "폐기물", "유품정리", "특수청소"];
+  const types = ["전체", "쓰레기집", "폐기물", "이사·입주", "유품정리", "특수청소"];
   const records = useMemo(
     () =>
       filter === "전체"
