@@ -86,24 +86,39 @@ const plannerServices = [
   {
     id: "trash",
     label: "쓰레기집 청소",
+    estimates: [[50, 90], [90, 160], [140, 240], [200, 350]],
     steps: ["보관 물품 분류", "생활폐기물 반출", "공간 기본 세척"],
   },
   {
     id: "waste",
     label: "폐기물 처리",
+    estimates: [[30, 50], [50, 80], [80, 120], [120, 180]],
     steps: ["품목·물량 확인", "반출 동선 계획", "폐기물 분류·운반"],
   },
   {
     id: "heritage",
     label: "유품정리",
+    estimates: [[40, 90], [80, 140], [120, 200], [180, 280]],
     steps: ["중요 물품 탐색", "보관·확인·정리 분류", "공간 마무리"],
   },
   {
     id: "special",
     label: "특수청소",
+    estimates: [[70, 130], [110, 200], [170, 300], [260, 450]],
     steps: ["오염 범위 확인", "오염원 제거", "전문 세척·표면 처리"],
   },
 ];
+
+const spaceLabels = ["10평 미만", "10~20평", "20~30평", "30평 이상"];
+const conditionLabels = ["정리 위주", "분류·반출 필요", "오염까지 심함"];
+const conditionRates = [0.75, 1, 1.45];
+const extraPrices = {
+  odor: [20, 40],
+  deep: [15, 30],
+  stairs: [10, 25],
+};
+
+const roundEstimate = (value) => Math.max(5, Math.round(value / 5) * 5);
 
 function ScopePlanner({ onConsult }) {
   const [service, setService] = useState("trash");
@@ -111,9 +126,16 @@ function ScopePlanner({ onConsult }) {
   const [condition, setCondition] = useState(1);
   const [extras, setExtras] = useState({ odor: false, deep: false, stairs: false });
   const selected = plannerServices.find((item) => item.id === service);
-  const extraCount = Object.values(extras).filter(Boolean).length;
-  const score = space + condition + extraCount;
-  const level = score >= 6 ? "종합 회복 범위" : score >= 3 ? "집중 작업 범위" : "기본 작업 범위";
+  const selectedExtras = Object.entries(extras).filter(([, active]) => active);
+  const extraPrice = selectedExtras.reduce(
+    (total, [key]) => [total[0] + extraPrices[key][0], total[1] + extraPrices[key][1]],
+    [0, 0],
+  );
+  const baseEstimate = selected.estimates[space];
+  const estimate = [
+    roundEstimate(baseEstimate[0] * conditionRates[condition] + extraPrice[0]),
+    roundEstimate(baseEstimate[1] * conditionRates[condition] + extraPrice[1]),
+  ];
   const steps = [
     ...selected.steps,
     ...(extras.odor ? ["악취 원인 확인·탈취"] : []),
@@ -126,14 +148,14 @@ function ScopePlanner({ onConsult }) {
   return (
     <section className="scope-planner section-pad" id="scope-planner">
       <motion.header {...reveal}>
-        <span className="eyebrow">SCOPE CHECK · 01</span>
+        <span className="eyebrow">ESTIMATE · 01</span>
         <h2>
-          1분이면 필요한 작업을
+          1분이면 예상 비용을
           <br />
-          <em>먼저 가늠할 수 있습니다.</em>
+          <em>미리 확인할 수 있습니다.</em>
         </h2>
         <p>
-          공간의 상태를 선택하면 상담 전에 확인할 작업 범위를 정리해 드립니다.
+          서비스와 공간 상태를 선택하면 공개 가격 자료를 기준으로 예상 견적 범위를 계산합니다.
         </p>
       </motion.header>
       <motion.div className="planner-shell" {...reveal}>
@@ -157,7 +179,7 @@ function ScopePlanner({ onConsult }) {
           <fieldset>
             <legend>02. 공간 크기는 어느 정도인가요?</legend>
             <div className="planner-options compact-options">
-              {["10평 미만", "10~20평", "20~30평", "30평 이상"].map((label, index) => (
+              {spaceLabels.map((label, index) => (
                 <button
                   type="button"
                   className={space === index ? "active" : ""}
@@ -173,7 +195,7 @@ function ScopePlanner({ onConsult }) {
           <fieldset>
             <legend>03. 현재 상태에 가장 가까운 단계는?</legend>
             <div className="planner-options compact-options condition-options">
-              {["정리 위주", "분류·반출 필요", "오염까지 심함"].map((label, index) => (
+              {conditionLabels.map((label, index) => (
                 <button
                   type="button"
                   className={condition === index ? "active" : ""}
@@ -212,11 +234,32 @@ function ScopePlanner({ onConsult }) {
         </div>
         <aside className="planner-result" aria-live="polite">
           <div>
-            <span>예상 작업 구성</span>
-            <small>선택한 상태를 기준으로 정리했습니다.</small>
+            <span>예상 견적 범위</span>
+            <small>2026년 공개 가격 자료 기준</small>
           </div>
-          <strong>{level}</strong>
-          <p>{selected.label}</p>
+          <strong className="estimate-total">
+            {estimate[0]}만 <i>~</i> {estimate[1]}만원
+          </strong>
+          <p>부가세 및 현장 확인 전 참고 금액입니다.</p>
+          <dl className="estimate-facts">
+            <div>
+              <dt>서비스</dt>
+              <dd>{selected.label}</dd>
+            </div>
+            <div>
+              <dt>공간</dt>
+              <dd>{spaceLabels[space]}</dd>
+            </div>
+            <div>
+              <dt>상태</dt>
+              <dd>{conditionLabels[condition]}</dd>
+            </div>
+            <div>
+              <dt>추가 항목</dt>
+              <dd>{selectedExtras.length ? `${selectedExtras.length}개 선택` : "없음"}</dd>
+            </div>
+          </dl>
+          <span className="included-label">예상 작업 범위</span>
           <ol>
             {steps.map((step, index) => (
               <li key={step}>
@@ -228,8 +271,7 @@ function ScopePlanner({ onConsult }) {
           <div className="planner-notice">
             <ScanSearch />
             <p>
-              정확한 금액은 물량과 반출 환경을 사진 또는 방문으로 확인한 뒤
-              안내합니다.
+              실제 금액은 폐기물량·오염 범위·지역·주차 및 반출 동선을 사진 또는 방문으로 확인한 뒤 확정합니다.
             </p>
           </div>
           <button className="primary" type="button" onClick={onConsult}>
